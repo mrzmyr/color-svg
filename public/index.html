@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style>
+    .item {
+      display: inline-block;
+      margin: 20px;
+    }
+    html, body {
+      height: 100%;
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+      margin: 0;
+      display: flex;
+      width: 100%;
+    }
+    #dropzone {
+      margin: 10px;
+      border: 4px dashed #EEE;
+      padding: 40px;
+      font-size: 38px;
+      color: #CCC;
+      text-align: center;
+      font-style: italic;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+  <div id="dropzone">
+    <span>Drop your SVG here.</span>
+  </div>
+  <div id="items"></div>
+  <script>
+    let results = null;
+    let items = [];
+
+    document.addEventListener('dragover', (e) => e.preventDefault(), false);
+    document.addEventListener('dragenter', (e) => e.preventDefault(), false);
+    document.addEventListener("drop", (e) => {
+      e.preventDefault();
+      if(e.target.id === 'dropzone') {
+        e.target.remove();
+        readFile(e.dataTransfer.files[0])
+      }
+    }, false);
+
+    function addElement(html) {
+      let div = document.createElement('div');
+      div.classList.add('item');
+      div.innerHTML = html;
+      itemsDiv.appendChild(div)
+    }
+
+    function readFile(file) {
+      const reader = new FileReader();
+
+      reader.onload = function(event) {
+        const parser = new DOMParser();
+        const svg = parser.parseFromString(event.target.result, "image/svg+xml");
+
+        results.map(item => {
+          const fillElements = svg.querySelectorAll(`[fill], [style]:not([style=""])`);
+
+          if(!fillElements.length) {
+            fillElements = svg.querySelectorAll(`path, polygon`);
+          }
+
+          fillElements.forEach((e, i) => {
+            e.setAttribute('fill', `#${item.colors[i % item.colors.length]}`)
+          })
+
+          svg.querySelectorAll(`[style*="fill"]`).forEach((e, i) => {
+            e.style.setProperty('fill', `#${item.colors[i % item.colors.length]}`)
+          });
+
+          svg.querySelectorAll(`[style*="stroke"]`).forEach((e, i) => {
+            e.style.setProperty('stroke', `#${item.colors[i % item.colors.length]}`);
+          })
+
+
+          let height = svg.documentElement.getAttribute('height') || 50;
+          let width = svg.documentElement.getAttribute('width') || 50;
+
+          svg.documentElement.setAttribute('viewBox', `0 0 ${width} ${height}`)
+          svg.documentElement.setAttribute('width', width)
+          svg.documentElement.setAttribute('height', height)
+          svg.documentElement.setAttribute('translate', `0 0`)
+
+          items.push(svg.cloneNode(true));
+        })
+
+        items.forEach(item => addElement(item.documentElement.outerHTML));
+      }
+
+      reader.readAsText(file);
+    }
+
+    const itemsDiv = document.getElementById('items');
+
+    (async () => {
+      const items = await fetch('/random', { step: 0 }).then(r => r.json());
+      results = items.results
+    })()
+
+  </script>
+</body>
+</html>
