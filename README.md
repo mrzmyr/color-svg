@@ -1,12 +1,12 @@
-### Color SVG
+# Color SVG
 
 Color your SVG in cool colors from [colorhunt.co](http://colorhunt.co/).
 
-#### Preview
+## Preview
 
 ![preview](img/preview.gif)
 
-#### Usage
+## Usage
 
 ```
 git clone https://github.com/mrzmyr/color-svg.git
@@ -17,6 +17,6 @@ npm start
 
 Open [localhost:3000](http://localhost:3000/)
 
-#### License
+## License
 
 MIT © [mrzmyr](https://github.com/mrzmyr)
