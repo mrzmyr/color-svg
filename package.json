@@ -8,5 +8,20 @@
   },
   "scripts": {
     "start": "node index.js"
-  }
+  },
+  "name": "color-svg",
+  "description": "Color your SVG in cool colors from [colorhunt.co](http://colorhunt.co/).",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrzmyr/color-svg.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrzmyr/color-svg/issues"
+  },
+  "homepage": "https://github.com/mrzmyr/color-svg#readme"
 }

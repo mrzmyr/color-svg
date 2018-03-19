@@ -16,3 +16,7 @@ npm start
 ```
 
 Open [localhost:3000](http://localhost:3000/)
+
+#### License
+
+MIT © [mrzmyr](https://github.com/mrzmyr)
